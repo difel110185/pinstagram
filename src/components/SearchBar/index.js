@@ -22,7 +22,7 @@ function SearchBar(props) {
 
     useDebounce(() => {
         props.onChange(value)
-    }, value, 500)
+    }, value, 1000)
 
     return (
         <SearchField accessibilityLabel="Search Field" id="searchField" onChange={(query) => onChange(query)} placeholder={props.placeholder} value={value}/>

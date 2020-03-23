@@ -1,6 +1,6 @@
 import React from 'react'
 import 'gestalt/dist/gestalt.css'
-import { Box, Icon, IconButton, Link, Text } from "gestalt"
+import { Box, IconButton, Link, Text } from "gestalt"
 import SearchBar from "../SearchBar";
 
 function NavBar(props) {

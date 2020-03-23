@@ -1,56 +1,81 @@
-import React, {useState, useEffect} from 'react';
+import React, {useReducer, useEffect} from 'react';
 import './App.css';
 import NavBar from "./components/NavBar";
 import PinMasonry from "./components/PinMasonry";
-import samplePinData from './samplePinData.json'
 import PinDetails from "./components/PinDetails";
 import {Spinner} from "gestalt";
+import axios from "axios";
 
 function App() {
-  const [selectedPin, setSelectedPin] = useState(undefined)
-  const [pins, setPins] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [search, setSearch] = useState("")
+  const initialState = {
+    selectedPin: undefined,
+    pins: [],
+    loading: false,
+    search: ""
+  }
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'setSelectedPin': return {...state, selectedPin: action.selectedPin};
+      case 'dismissModal': return {...state, selectedPin: undefined};
+      case 'setPins': return {...state, pins: action.pins};
+      case 'showLoading': return {...state, loading: true};
+      case 'hideLoading': return {...state, loading: false};
+      case 'setSearch': return {...state, search: action.search};
+      default: throw new Error('Unexpected action: ' + action);
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const fetchData = (search) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const pins = samplePinData.filter(pin => {
-          if (!search)
-            return true
+    axios.get('https://api.unsplash.com/search/photos?page=1&per_page=100&client_id=mibyxpcYkfY2kvWPWuVRSF2syIdWa8pcPCFM4kS7K-s&query=' + search)
+      .then((response) => {
+        const pins = response.data.results.map(pin => {
+          const fullPin = {
+            author: pin.user.name,
+            title: pin.description || pin.alt_description || pin.id,
+            image: pin.urls.small,
+            width: pin.width,
+            height: pin.height
+          }
 
-          return pin.title.toLowerCase().includes(search.toLowerCase()) || pin.author.toLowerCase().includes(search.toLowerCase())
-        }).map(pin => {
           return {
-            ...pin,
+            ...fullPin,
             open() {
-              setSelectedPin(pin)
+              dispatch({type: 'setSelectedPin', selectedPin: fullPin})
             }
           }
-        });
+        })
 
-        resolve(pins);
-      }, 2000)
-    })
+        dispatch({type: 'setPins', pins: pins})
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then(() => {
+        dispatch({type: 'hideLoading'})
+      })
   }
 
   useEffect(() => {
-    setLoading(true)
-    fetchData(search).then(pins => {
-      setPins(pins)
-      setLoading(false)
-    })
-  }, [search])
+    dispatch({type: 'showLoading'})
+    fetchData(state.search)
+  }, [state.search])
+
+  const setSearch = (search) => {
+    dispatch({type: 'setSearch', search: search})
+  }
 
   return (
       <div>
         <NavBar loggedIn={false} onSearch={setSearch} />
-        <Spinner show={loading} accessibilityLabel="Loading pins..." />
-        {(!loading &&
-            <PinMasonry pins={pins}/>
+        <Spinner show={state.loading} accessibilityLabel="Loading pins..." />
+        {(!state.loading &&
+            <PinMasonry pins={state.pins}/>
         )}
-        {(selectedPin &&
-            <PinDetails data={selectedPin} dismiss={() => setSelectedPin(undefined)} />
+        {(state.selectedPin &&
+            <PinDetails data={state.selectedPin} dismiss={() => dispatch({type: 'dismissModal'})} />
         )}
       </div>
   );

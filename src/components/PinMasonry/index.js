@@ -1,6 +1,6 @@
 import React from 'react'
 import 'gestalt/dist/gestalt.css'
-import {Masonry, Heading, Box, Text} from "gestalt"
+import {Masonry, Box, Text} from "gestalt"
 import Pin from "../Pin";
 
 function PinMasonry(props) {
