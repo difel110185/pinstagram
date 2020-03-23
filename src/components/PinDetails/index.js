@@ -4,45 +4,18 @@ import { Box, Text, Modal, Image, IconButton } from "gestalt"
 
 function PinDetails(props) {
     return (
-        <Modal
-            accessibilityCloseLabel="close"
-            accessibilityModalLabel="Details about the pin"
-            heading={props.data.title}
-            onDismiss={props.onDismiss}
-        >
-            <Box
-                position="relative"
-            >
-                <Image
-                    alt={props.data.title}
-                    src={props.data.image}
-                    naturalHeight={props.data.height}
-                    naturalWidth={props.data.width}
-                />
-                <Box
-                    position="absolute"
-                    padding={2}
-                    bottom
-                    right
-                >
-                    <IconButton
-                        accessibilityLabel="Love"
-                        bgColor="white"
-                        icon="heart"
-                        iconColor={ props.data.liked ? "red" : "gray"}
-                        onClick={props.onLike}
-                    />
+        <Modal accessibilityCloseLabel="close" accessibilityModalLabel="Details about the pin" heading={props.data.title} onDismiss={props.dismiss}>
+            <Box position="relative">
+                <Image alt={props.data.title} src={props.data.image} naturalHeight={props.data.height} naturalWidth={props.data.width} />
+                <Box position="absolute" padding={2} bottom right >
+                    <IconButton accessibilityLabel="Love" bgColor="white" icon="heart" iconColor={ props.data.liked ? "red" : "gray"} onClick={props.data.like} />
                 </Box>
             </Box>
             <Box padding={2}>
-                <Text>
-                    {props.data.author}
-                </Text>
+                <Text>{props.data.author}</Text>
             </Box>
             <Box padding={2}>
-                <Text>
-                    {props.data.description}
-                </Text>
+                <Text>{props.data.description}</Text>
             </Box>
         </Modal>
     )

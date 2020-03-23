@@ -8,27 +8,14 @@ function NavBar(props) {
         <Box color="white" rounding={2} padding={3} display="flex" direction="row" alignItems="center">
             <Box padding={3}>
                 {(props.loggedIn &&
-                    <IconButton
-                        accessibilityLabel="Person"
-                        bgColor="white"
-                        icon="person"
-                        iconColor="gray"
-                        onClick={() => { console.log("person")}}
-                    />
+                    <IconButton accessibilityLabel="Person" bgColor="white" icon="person" iconColor="gray" onClick={() => { console.log("person")}}/>
                 )}
                 {(!props.loggedIn &&
-                    <IconButton
-                        accessibilityLabel="Star"
-                        bgColor="white"
-                        icon="star"
-                        iconColor="gray"
-                        onClick={() => { console.log("star")}}
-                    />
+                    <IconButton accessibilityLabel="Star" bgColor="white" icon="star" iconColor="gray" onClick={() => { console.log("star")}}/>
                 )}
-
             </Box>
             <Box flex="grow" paddingX={2}>
-                <SearchBar placeholder={"Search and explore"} />
+                <SearchBar placeholder={"Search and explore"} onChange={props.onSearch} />
             </Box>
             <Box paddingX={2}>
                 <Link href="#">

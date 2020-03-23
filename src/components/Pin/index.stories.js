@@ -16,11 +16,11 @@ export default {
 }
 
 export const Default = () => (
-    <Pin data={{...fakeData, liked: false}} onOpen={action('open')} onLike={action('like')}/>
+    <Pin data={{...fakeData, liked: false}} open={action('open')} onLike={action('like')}/>
 )
 
 export const Liked = () => (
-    <Pin data={{...fakeData, liked: true}} onOpen={action('open')} onLike={action('like')}/>
+    <Pin data={{...fakeData, liked: true}} open={action('open')} onLike={action('like')}/>
 )
 
 

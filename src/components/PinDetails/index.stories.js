@@ -17,9 +17,9 @@ export default {
 }
 
 export const Default = () => (
-    <PinDetails data={{...fakeData, liked: false}} onDismiss={action('dismiss')} onLike={action('like')}/>
+    <PinDetails data={{...fakeData, liked: false}} dismiss={action('dismiss')} like={action('like')}/>
 )
 
 export const Liked = () => (
-    <PinDetails data={{...fakeData, liked: true}} onDismiss={action('dismiss')} onLike={action('like')}/>
+    <PinDetails data={{...fakeData, liked: true}} dismiss={action('dismiss')} like={action('like')}/>
 )

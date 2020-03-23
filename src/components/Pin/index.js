@@ -15,7 +15,7 @@ function Pin(props) {
                         </Mask>
                         {showLayer && (
                             <Box position="absolute" padding={2} bottom left>
-                                <Button bgColor="white" text="Open" onClick={props.onOpen} />
+                                <Button bgColor="white" text="Open" onClick={props.data.open} />
                             </Box>
                         )}
                         {showLayer && (
