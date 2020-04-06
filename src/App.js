@@ -29,21 +29,13 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const fetchData = (search) => {
-    axios.get('https://api.unsplash.com/search/photos?page=1&per_page=100&client_id=mibyxpcYkfY2kvWPWuVRSF2syIdWa8pcPCFM4kS7K-s&query=' + search)
+    axios.get('/api/pins?query=' + search)
       .then((response) => {
         const pins = response.data.results.map(pin => {
-          const fullPin = {
-            author: pin.user.name,
-            title: pin.description || pin.alt_description || pin.id,
-            image: pin.urls.small,
-            width: pin.width,
-            height: pin.height
-          }
-
           return {
-            ...fullPin,
+            ...pin,
             open() {
-              dispatch({type: 'setSelectedPin', selectedPin: fullPin})
+              dispatch({type: 'setSelectedPin', selectedPin: pin})
             }
           }
         })
