@@ -31,21 +31,21 @@ function NavBar(props) {
             )}
             {(props.loggedIn &&
                 <Box paddingX={2}>
-                    <Link href="#">
+                    <Link href={""} onClick={props.logoutButtonClick}>
                         <Text weight="bold" color={"gray"}>Log Out</Text>
                     </Link>
                 </Box>
             )}
             {(!props.loggedIn &&
                 <Box paddingX={2}>
-                    <Link href="#">
+                    <Link href={""} onClick={props.signUpButtonClick}>
                         <Text weight="bold" color={"gray"}>Sign Up</Text>
                     </Link>
                 </Box>
             )}
             {(!props.loggedIn &&
                 <Box paddingX={2}>
-                    <Link href="#">
+                    <Link href={""} onClick={props.loginButtonClick}>
                         <Text weight="bold" color={"gray"}>Log In</Text>
                     </Link>
                 </Box>
