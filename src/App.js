@@ -4,26 +4,30 @@ import NavBar from "./components/NavBar";
 import PinMasonry from "./components/PinMasonry";
 import PinDetails from "./components/PinDetails";
 import {Spinner} from "gestalt";
-import {getPins} from './networkManager';
+import {getPins, likePin} from './networkManager';
 import LoginForm from "./components/LoginForm";
 
 function App() {
   const initialState = {
-    loggedIn: !!(localStorage.getItem('token')),
-    showingLoginForm: !(localStorage.getItem('token')),
+    loggedIn: false,
+    showingLoginForm: true,
     selectedPin: undefined,
     pins: [],
     loading: false,
-    search: ""
+    search: "",
+    email: "",
+    likedPinId: undefined,
+    liked: undefined
   }
 
   const reducer = (state, action) => {
     switch (action.type) {
       case 'showLoginForm': return {...state, showingLoginForm: true};
       case 'hideLoginForm': return {...state, showingLoginForm: false};
-      case 'login': return {...state, showingLoginForm: false, loggedIn: true};
-      case 'logout': return {...state, showingLoginForm: true, loggedIn: false};
+      case 'login': return {...state, showingLoginForm: false, loggedIn: true, email: action.email};
+      case 'logout': return {...state, showingLoginForm: true, loggedIn: false, email: undefined};
       case 'setSelectedPin': return {...state, selectedPin: action.selectedPin};
+      case 'likePin': return {...state, likedPinId: action.likedPinId, liked: action.liked};
       case 'dismissModal': return {...state, selectedPin: undefined};
       case 'setPins': return {...state, pins: action.pins};
       case 'showLoading': return {...state, loading: true};
@@ -37,13 +41,18 @@ function App() {
 
   const fetchData = (search) => {
     if (state.loggedIn)
-      getPins(search)
+      getPins(search, state.email)
         .then((response) => {
           const pins = response.data.results.map(pin => {
             return {
               ...pin,
               open() {
                 dispatch({type: 'setSelectedPin', selectedPin: pin})
+              },
+              like() {
+                console.log(pin.id)
+                console.log("liked: " + (pin.liked !== 1))
+                dispatch({type: 'likePin', likedPinId: pin.id, liked: (pin.liked !== 1)})
               }
             }
           })
@@ -63,6 +72,21 @@ function App() {
     fetchData(state.search)
   }, [state.search, state.loggedIn])
 
+  useEffect(() => {
+    if (state.liked !== undefined) {
+      dispatch({type: 'showLoading'})
+      likePin(state.email, state.likedPinId, state.liked).then((response) => {
+        fetchData(state.search)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then(() => {
+        dispatch({type: 'hideLoading'})
+      })
+    }
+  }, [state.likedPinId, state.liked])
+
   const setSearch = (search) => {
     dispatch({type: 'setSearch', search: search})
   }
@@ -78,7 +102,7 @@ function App() {
             <PinDetails data={state.selectedPin} dismiss={() => dispatch({type: 'dismissModal'})} />
         )}
         {(state.showingLoginForm &&
-            <LoginForm dismiss={() => dispatch({type: 'hideLoginForm'})} login={() => dispatch({type: 'login'})} />
+            <LoginForm dismiss={() => dispatch({type: 'hideLoginForm'})} login={(email) => dispatch({type: 'login', email: email})} />
         )}
       </div>
   );

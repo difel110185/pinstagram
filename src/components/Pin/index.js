@@ -20,7 +20,7 @@ function Pin(props) {
                         )}
                         {showLayer && (
                             <Box position="absolute" padding={2} bottom right>
-                                <IconButton accessibilityLabel="Love" bgColor="white" icon="heart" iconColor={ props.data.liked ? "red" : "gray"} onClick={props.onLike} />
+                                <IconButton accessibilityLabel="Love" bgColor="white" icon="heart" iconColor={ props.data.liked ? "red" : "gray"} onClick={props.data.like} />
                             </Box>
                         )}
                     </Box>

@@ -11,7 +11,7 @@ function LoginForm(props) {
         login(email, password).then((response) => {
             localStorage.setItem('token', response.data.accessToken)
 
-            props.login()
+            props.login(email)
         })
         .catch((error) => {
             console.log(error);
@@ -22,7 +22,7 @@ function LoginForm(props) {
         signUp(email, password).then((response) => {
             localStorage.setItem('token', response.data.accessToken)
 
-            props.login()
+            props.login(email)
         })
         .catch((error) => {
             console.log(error);
